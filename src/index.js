@@ -4,21 +4,9 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-const App = function () {
-	const buttonText = { text: "click me!" };
-	const style = { backgroundColor: "blue", color: "white" };
-	return (
-		<div>
-			<label className="label" htmlFor="name">
-				{" "}
-				enter name:{" "}
-			</label>
-			<input id="name" type="text" />
-			<button style={style}>{buttonText.text}</button>
-		</div>
-	);
+const App = () => {
+	return <div>Hi there!</div>;
 };
-
 // Variation
 /* ARROW FUNCTION
 const App = () => {
