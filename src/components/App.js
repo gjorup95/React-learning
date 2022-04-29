@@ -1,56 +1,45 @@
-import React, { useState } from "react";
-import Accordion from "./Accordion";
-import Dropdown from "./Dropdown";
-import Search from "./Search";
-import Translate from "./Translate";
-import Route from "./Route";
-import Header from "./Header";
-
-const items = [
-	{
-		title: "What is react?",
-		content: "React is a front end javascript framework",
-	},
-	{
-		title: "Why use React",
-		content: "React is a favorite JS library among engineers",
-	},
-	{
-		title: "How do you use React?",
-		content: "You use React by creating components",
-	},
-];
-
-const options = [
-	{ label: "The Color Red", value: "Red" },
-	{ label: "The Color Green", value: "Green" },
-	{ label: "A Shade of Blue", value: "Blue" },
-];
-
-// eslint-disable-next-line import/no-anonymous-default-export
-export default () => {
-	const [selected, setSelected] = useState(options[0]);
-
-	return (
-		<div>
-			<Header />
-			<Route path="/">
-				<Accordion items={items} />
-			</Route>
-			<Route path="/list">
-				<Search />
-			</Route>
-			<Route path="/dropdown">
-				<Dropdown
-					label="Select a color"
-					options={options}
-					selected={selected}
-					onSelectedChange={setSelected}
-				/>
-			</Route>
-			<Route path="/translate">
-				<Translate />
-			</Route>
-		</div>
-	);
-};
+import React, { Component } from "react";
+import SearchBar from "./SearchBar";
+import Youtube from "../api/Youtube";
+import VideoList from "./VideoList";
+import VideoDetail from "./VideoDetail";
+class App extends Component {
+	state = { videos: [], selectedVideo: null };
+	// we expect the api to return an array of images
+	onTermSubmit = async (term) => {
+		const response = await Youtube.get("/search", {
+			params: { q: term },
+		});
+		this.setState({
+			videos: response.data.items,
+			selectedVideo: response.data.items[0],
+		});
+	};
+	onVideoSelect = (video) => {
+		this.setState({ selectedVideo: video });
+	};
+	componentDidMount() {
+		this.onTermSubmit("buildings");
+	}
+	render() {
+		return (
+			<div className="ui container">
+				<SearchBar onFormSubmit={this.onTermSubmit} />
+				<div className="ui grid">
+					<div className="ui row">
+						<div className="eleven wide column">
+							<VideoDetail video={this.state.selectedVideo} />
+						</div>
+						<div className="five wide column">
+							<VideoList
+								onVideoSelect={this.onVideoSelect}
+								videos={this.state.videos}
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
+}
+export default App;
