@@ -1,6 +1,7 @@
 import React from "react";
 import UserCreate from "./UserCreate";
 import LanguageContext from "../contexts/LanguageContext";
+import ColorContext from "../contexts/ColorContext";
 
 // we will only use redux as our state currently.
 class App extends React.Component {
@@ -24,7 +25,9 @@ class App extends React.Component {
 					></i>
 				</div>
 				<LanguageContext.Provider value={this.state.language}>
-					<UserCreate></UserCreate>
+					<ColorContext.Provider value="blue">
+						<UserCreate />
+					</ColorContext.Provider>
 				</LanguageContext.Provider>
 			</div>
 		);
